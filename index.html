@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Techvelo - Smart Tools. Simple Solutions.</title>
+    <meta name="description" content="Techvelo offers premium, free online tools for everyday tasks including AI, PDF, text, and image utilities.">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- PDF Lib for merging -->
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    
+    <!-- PDF.js for rendering PDF to image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+</head>
+<body>
+    <div class="background-mesh"></div>
+
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <a href="#/" class="logo">
+                <i data-lucide="zap"></i> Techvelo
+            </a>
+            
+            <div class="search-container">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="global-search" placeholder="Search for a tool...">
+                <div id="search-results" class="search-results glass hidden"></div>
+            </div>
+
+            <div class="nav-links">
+                <a href="#/">Home</a>
+                <a href="#/tools">All Tools</a>
+                <a href="#/about">About</a>
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i data-lucide="moon"></i>
+                </button>
+            </div>
+            
+            <button id="mobile-menu-btn" class="mobile-only icon-btn">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        
+        <div id="mobile-menu" class="mobile-menu glass hidden">
+            <a href="#/">Home</a>
+            <a href="#/tools">All Tools</a>
+            <a href="#/about">About</a>
+        </div>
+    </nav>
+
+    <main id="app-content">
+        <!-- Content will be injected here by script.js -->
+    </main>
+
+    <footer class="footer glass">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Techvelo</h3>
+                <p>Smart Tools. Simple Solutions.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#/about">About Us</a>
+                <a href="#/contact">Contact Us</a>
+                <a href="#/privacy">Privacy Policy</a>
+                <a href="#/terms">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Techvelo. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="student-tools.js"></script>
+</body>
+</html>
