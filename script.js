@@ -115,11 +115,13 @@ function initRouter() {
             app.innerHTML = '<div class="text-center section-title">Tool not found</div>';
         }
     } else if (path === '/about') {
-        app.innerHTML = `<div class="glass-card" style="padding: 3rem"><h1 class="section-title">About Techvelo</h1><p>Techvelo offers premium, secure, and fast online tools. Smart Tools. Simple Solutions.</p></div>`;
+        renderAboutPage(app);
     } else if (path === '/contact') {
-        app.innerHTML = `<div class="glass-card" style="padding: 3rem"><h1 class="section-title">Contact Us</h1><p>Email: support@techvelo.local</p></div>`;
-    } else if (path === '/privacy' || path === '/terms') {
-        app.innerHTML = `<div class="glass-card" style="padding: 3rem"><h1 class="section-title">Legal Information</h1><p>Techvelo processes most data locally in your browser. AI tools require API keys that are only stored in your browser's local storage.</p></div>`;
+        renderContactPage(app);
+    } else if (path === '/privacy') {
+        renderPrivacyPage(app);
+    } else if (path === '/terms') {
+        renderTermsPage(app);
     } else {
         app.innerHTML = '<div class="text-center section-title">Page not found</div>';
     }

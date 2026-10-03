@@ -648,3 +648,206 @@ input[type="file"] {
         font-size: 2.5rem;
     }
 }
+
+/* ==========================================
+   STATIC PAGES (About, Contact, Privacy, Terms)
+   ========================================== */
+
+.static-page {
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.static-page-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+}
+
+.static-page-header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.75rem;
+}
+
+.static-page-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.static-page-body {
+    padding: 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.static-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.static-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.static-section h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.static-section p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+}
+
+.static-section p:last-child {
+    margin-bottom: 0;
+}
+
+.static-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+}
+
+.static-list li {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    padding: 0.4rem 0 0.4rem 1.5rem;
+    position: relative;
+}
+
+.static-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* About value cards */
+.about-values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.about-value-card {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.about-value-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: var(--primary-color);
+}
+
+.about-value-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.about-value-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Contact page */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 3rem;
+}
+
+.contact-form {
+    margin-top: 1.5rem;
+}
+
+.contact-info {
+    margin-top: 0;
+}
+
+.contact-info h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.contact-info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.contact-info-card i {
+    color: var(--primary-color);
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.contact-info-card strong {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.contact-info-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Form field errors */
+.field-error {
+    display: block;
+    font-size: 0.82rem;
+    color: #ef4444;
+    margin-top: 0.35rem;
+}
+
+.input-error {
+    box-shadow: 0 0 0 2px #ef4444 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .static-page-body {
+        padding: 1.5rem;
+    }
+
+    .static-page-header h1 {
+        font-size: 2rem;
+    }
+
+    .about-values-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-values-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
