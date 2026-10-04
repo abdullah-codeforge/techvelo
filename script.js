@@ -14,8 +14,186 @@ const TOOLS = [
 const CATEGORIES = [...new Set(TOOLS.map(t => t.category))];
 
 // ==========================================
-// CORE APP LOGIC & ROUTING
+// PER-TOOL GUIDES & CONTENT
 // ==========================================
+
+const TOOL_GUIDES = {
+    'word-counter': {
+        intro: 'Word Counter gives you an instant, accurate breakdown of any text you paste or type. It counts words, characters (with and without spaces), sentences, paragraphs, and estimates how long it would take an average reader to finish the content.',
+        who: 'Students checking essay length, writers tracking article targets, bloggers ensuring posts hit a word count goal, or anyone who needs to know the size of a piece of text.',
+        steps: ['Paste or type your text into the input box.', 'Stats update instantly — no button click needed.', 'Use the Copy Text button to copy your input back to the clipboard.', 'Click Clear to reset everything.'],
+        tips: 'Reading time is estimated at approximately 200 words per minute, which is the average for silent reading. Your actual reading speed may differ.'
+    },
+    'case-converter': {
+        intro: 'Case Converter transforms text between four common capitalization formats instantly. Whether you need all caps for a heading, sentence case for an email, or title case for a formal document, this tool handles it in one click.',
+        who: 'Writers, coders, students, and professionals who frequently need to reformat copied text without retyping it.',
+        steps: ['Paste or type your text in the input box.', 'Click one of the four buttons: UPPERCASE, lowercase, Title Case, or Sentence case.', 'The converted text appears in the Result box below.', 'Click Copy Result to copy the output to your clipboard.'],
+        tips: 'Title Case capitalizes the first letter of every word. Sentence case only capitalizes the very first word of the text.'
+    },
+    'ai-summarizer': {
+        intro: 'AI Text Summarizer uses OpenAI\'s GPT model to condense long articles, reports, or documents into a shorter, readable summary. Choose how brief or detailed you want the output to be.',
+        who: 'Students summarizing research papers, professionals skimming long reports, or anyone who wants the key points from a long document without reading everything.',
+        steps: ['Enter your OpenAI API key in the field provided. It is stored only in your browser and sent directly to OpenAI — never to Techvelo.', 'Paste the text you want summarized.', 'Choose a summary length: Short, Medium, or Long.', 'Click Summarize and wait a moment for the AI to respond.', 'Copy the result using the Copy Result button.'],
+        tips: 'For best results, paste clean text without unnecessary symbols or formatting. Very short inputs (under 50 words) may not produce useful summaries. Your API key must have available credits on your OpenAI account.'
+    },
+    'ai-rewriter': {
+        intro: 'AI Text Rewriter takes your existing writing and rephrases it in a different tone — more professional, simpler, friendlier, or more formal — without changing the core meaning.',
+        who: 'Students improving essay drafts, professionals polishing emails, content writers adapting copy for different audiences, or non-native English speakers refining their writing.',
+        steps: ['Enter your OpenAI API key.', 'Paste the text you want to rewrite.', 'Select a tone from the dropdown: Professional, Simple, Friendly, or Formal.', 'Click Rewrite and wait for the AI response.', 'Review and copy the rewritten text.'],
+        tips: 'Short, clear input tends to give the most focused rewrite. If the rewrite does not match your expectations, try a different tone or rephrase your original text slightly before submitting again.'
+    },
+    'image-compressor': {
+        intro: 'Image Compressor reduces the file size of JPEG, PNG, and WebP images directly in your browser. No files are ever uploaded to a server — all processing happens locally on your device.',
+        who: 'Web developers optimizing page load times, students attaching images to online submissions with file size limits, or anyone sharing images over email or messaging apps.',
+        steps: ['Click the upload area or drag and drop a JPEG, PNG, or WebP image onto it.', 'Use the Quality slider to set your desired compression level (10% to 100%). Lower values mean smaller files but reduced image quality.', 'Click Compress Image.', 'Review the before and after file sizes shown.', 'Click Download Image to save the compressed version.'],
+        tips: 'A quality setting of 70–80% usually offers a good balance between visual quality and file size reduction. PNG images with transparency may be converted to JPEG, which does not support transparency.'
+    },
+    'image-resizer': {
+        intro: 'Image Resizer lets you change the exact pixel dimensions of any image. It supports all common image formats and processes everything locally in your browser without uploading your file anywhere.',
+        who: 'Developers needing specific image dimensions for websites or apps, students resizing profile photos to meet upload requirements, or anyone fitting images to a fixed size constraint.',
+        steps: ['Upload an image by clicking the upload area or dragging a file onto it.', 'Enter your desired Width or Height in pixels.', 'Keep "Maintain Aspect Ratio" checked to prevent distortion, or uncheck it to set both dimensions independently.', 'Click Resize Image.', 'Preview the result and click Download Image to save it.'],
+        tips: 'Enlarging an image beyond its original dimensions will reduce its quality. For best results, only scale images down, or use images with a higher resolution than your target size.'
+    },
+    'pdf-merger': {
+        intro: 'PDF Merger combines two or more PDF files into a single document, all inside your browser. No files leave your device, making it safe for sensitive documents.',
+        who: 'Students combining assignment pages, professionals packaging reports, or anyone who regularly needs to compile several PDFs into one file.',
+        steps: ['Click the upload area and select two or more PDF files from your computer. You can select multiple files at once.', 'The selected files will be listed in the order they were added.', 'Click Merge PDFs to begin combining them.', 'Once complete, click Download Merged PDF to save the result.', 'Click Start Over to reset and merge a different set of files.'],
+        tips: 'Files are merged in the order they are listed. If you need a specific order, select files in that sequence when uploading. Very large PDFs may take a few seconds to process depending on your device\'s speed.'
+    },
+    'pdf-to-images': {
+        intro: 'PDF to Images converts every page of a PDF document into individual PNG image files. This is useful when you need to share specific PDF pages as images, or when a system only accepts image formats.',
+        who: 'Students extracting slides or diagrams from lecture PDFs, professionals sharing specific PDF pages on social media or in presentations, or developers working with document content as images.',
+        steps: ['Click the upload area and select a PDF file from your device.', 'The tool will detect and display the number of pages in the PDF.', 'Click "Convert All Pages to Images" to begin the conversion.', 'Each page will appear as a separate image once processed.', 'Click the Download button beneath each page image to save it individually.'],
+        tips: 'Conversion quality depends on the original PDF resolution. Password-protected PDFs cannot be processed by this tool. For very large PDFs, conversion may take some time as all processing is done in your browser.'
+    },
+    'json-formatter': {
+        intro: 'JSON Formatter helps you quickly make raw or minified JSON readable. It can also validate your JSON for syntax errors and minify formatted JSON back into a compact single line.',
+        who: 'Developers inspecting API responses, students learning about JSON data structures, or anyone working with configuration files or data exports.',
+        steps: ['Paste your JSON data into the input box.', 'Choose an indentation style: 2 Spaces, 4 Spaces, or Tab.', 'Click "Format & Validate" to beautify the JSON and check it for errors. Any syntax errors will be highlighted.', 'Click "Minify" to compress formatted JSON back into a compact single line.', 'Click "Copy Output" to copy the result.'],
+        tips: 'If you see an error message after clicking Format, it means your JSON has a syntax issue. Common problems include missing commas, unmatched brackets, or unquoted keys. The error message will indicate where the problem is.'
+    },
+    'password-generator': {
+        intro: 'Password Generator creates strong, random passwords based on the character types and length you choose. All generation happens in your browser — no passwords are stored or transmitted anywhere.',
+        who: 'Anyone who needs to create a new account password, IT professionals setting up system credentials, or security-conscious users who want to avoid weak or reused passwords.',
+        steps: ['Choose a password length using the slider (4 to 64 characters). Longer passwords are generally more secure.', 'Check or uncheck the character type boxes: Uppercase letters, Lowercase letters, Numbers, and Symbols.', 'Click "Generate New Password" to create a password, or click the copy icon next to the generated password to copy it immediately.', 'The Strength indicator below will reflect the current password\'s estimated security level.'],
+        tips: 'For most online accounts, a length of 16 or more characters with all four character types enabled is recommended. Never share generated passwords over email or messaging. Using a password manager to store them is strongly advised.'
+    },
+    'assignment-planner': {
+        intro: 'Assignment Planner helps you keep track of all your academic assignments in one place. Add tasks with their subject, due date, and priority level, and mark them complete as you finish them. Your assignments are saved in your browser and will still be here when you return.',
+        who: 'Students at any level who want to stay organized, avoid missing deadlines, and manage their academic workload effectively.',
+        steps: ['Fill in the Title (required) and optionally the Subject, Due Date, and Priority.', 'Click "Add Assignment" to save it to your list.', 'Use the filter buttons (All, Upcoming, Overdue) to view specific groups of assignments.', 'Click the complete button on any assignment to mark it as done.', 'Remove completed or unnecessary assignments using the delete button.'],
+        tips: 'Your assignments are saved automatically in your browser\'s local storage. They will persist between visits as long as you use the same browser. Clearing your browser data will remove saved assignments.'
+    },
+    'citation-generator': {
+        intro: 'Citation Generator produces correctly formatted academic citations for books, websites, and journal articles. It currently supports APA 7th edition with source-specific formatting, and also provides templates for MLA 9th, Chicago, and Harvard styles.',
+        who: 'Students writing research papers, essays, or theses who need to properly credit their sources and follow a specific citation style.',
+        steps: ['Select your Citation Style (APA 7th is the most detailed and recommended).', 'Select the Source Type: Book, Website, or Journal Article. The form will update to show the relevant fields.', 'Fill in the Author (required) and Title (required). Add as many other fields as you have available.', 'Click "Generate Citation" to produce the formatted citation.', 'Copy the result using the "Copy Citation" button.'],
+        tips: 'Always verify citations against your institution\'s official style guide, as requirements may vary. For websites, including the access date may be required by some institutions even though this tool does not have a dedicated field for it. For journal articles, check the Volume, Issue, and Page numbers in the original source.'
+    },
+    'research-organizer': {
+        intro: 'Research Paper Organizer gives you a personal library to save and manage all your sources in one place. Add titles, authors, URLs, key findings, and tags to keep your research organized and searchable.',
+        who: 'Students conducting literature reviews or working on research papers who need to track multiple sources, papers, and websites.',
+        steps: ['Enter the Title (required) of the source along with any other details like Author, URL, Notes, and Tags.', 'Click "Save Source" to add it to your library.', 'Use the Search box on the right to filter your saved sources by title or tag.', 'Use "Export JSON" to save a backup file of all your sources.', 'Use "Import JSON" to restore a previously exported backup.'],
+        tips: 'Use descriptive tags (e.g., "climate", "methodology", "key source") to make filtering faster. Your sources are saved in your browser. Export a backup regularly if you are working on a long project to avoid accidental data loss.'
+    },
+    'presentation-outline': {
+        intro: 'Presentation Outline Maker generates a slide-by-slide outline for your presentations. Without an API key, it produces a useful manual template based on your topic and duration. With an OpenAI API key, it can generate more tailored, content-specific outlines.',
+        who: 'Students preparing academic presentations, professionals building business pitches, or anyone planning a structured talk and needing a quick starting framework.',
+        steps: ['Optionally enter your OpenAI API key for AI-powered outlines. Leave it blank for a manual template.', 'Enter your Topic (required).', 'Enter the target Audience (e.g., "university students", "business executives").', 'Set the Duration in minutes.', 'Click "Generate Outline" to produce your slide plan.', 'Copy the outline using the "Copy Result" button.'],
+        tips: 'The manual template distributes slides roughly evenly at 2 minutes per slide. Use it as a starting framework and add your own bullet points. If using AI, be specific with your topic — for example, "The impact of social media on mental health in teenagers" will produce a better outline than just "social media".'
+    },
+    'flashcard-maker': {
+        intro: 'Flashcard Maker lets you create and study your own digital flashcard decks. Type a question on the front and the answer on the back, then use the flip, next, and previous buttons to study your deck. Your cards are saved in your browser.',
+        who: 'Students memorizing vocabulary, definitions, formulas, historical dates, or any material that benefits from active recall practice.',
+        steps: ['Type a question or term in the "Front" box and the answer or definition in the "Back" box.', 'Click "Add Card" to add it to your deck.', 'Use the card viewer on the right to study. Click "Flip" to see the answer, and "Next" or "Prev" to move between cards.', 'Use "Export Deck" to download your flashcards as a JSON file for backup or sharing.', 'Use "Import Deck" to load a previously exported JSON file.'],
+        tips: 'Keep each card focused on a single concept. Short, specific questions work better than long, vague ones. Imported decks are checked for duplicates — cards that already exist in your current deck will not be added twice.'
+    },
+    'quiz-generator': {
+        intro: 'Quiz & MCQ Generator lets you create and take multiple-choice quizzes. You can add questions manually one by one, or use AI to automatically generate questions from a block of text or your study notes.',
+        who: 'Students preparing for exams who want to test their own knowledge, teachers or tutors creating quick practice quizzes, or anyone who wants to turn notes into an interactive test.',
+        steps: ['To add questions manually: Fill in the Question, Options A through D, select the correct answer, and click "Add Question".', 'To generate questions with AI: Paste your notes into the Notes text box, enter your API key, and click "Generate from Notes". The AI will create 3 multiple-choice questions from your text.', 'Once questions are added, they appear in the Quiz View on the right.', 'Select your answers and click "Submit Quiz" to see your score.', 'Click "Clear Quiz" to start fresh.'],
+        tips: 'AI-generated questions are based on the text you provide. The more specific and factual your notes, the better the questions. AI may occasionally produce questions with ambiguous answers — always review AI output before using it for serious study.'
+    },
+    'gpa-calculator': {
+        intro: 'GPA & CGPA Calculator computes your semester GPA and optionally your cumulative GPA (CGPA) if you provide your previous results. It uses the standard 4.0 scale with +/- grade variations.',
+        who: 'University and college students who want to track their academic standing, plan for grade improvement, or understand how a current semester affects their overall CGPA.',
+        steps: ['For each subject in your current semester, enter the Credit Hours and select the Grade you received or expect.', 'Click "+ Add Subject" if you need more rows.', 'To calculate CGPA, enter your Previous CGPA and the total Previous Credits Completed in the right panel.', 'Click "Calculate GPA" to see your Semester GPA and Overall CGPA.'],
+        tips: 'The calculator uses the standard 4.0 scale (A=4.0, A-=3.7, B+=3.3, B=3.0, etc.). Some universities use different scales or do not include +/- grades. Cross-check your institution\'s specific grading policy for accurate results. The calculator does not account for failed/repeated courses in CGPA unless you adjust the input accordingly.'
+    },
+    'study-timetable': {
+        intro: 'Study Timetable Generator creates a simple weekly study schedule by distributing your subjects across the days of the week. Enter your subjects and how many hours per day you want to study, and it builds a 7-day plan.',
+        who: 'Students who want to ensure every subject gets regular attention across the week, especially during exam preparation periods.',
+        steps: ['Type your subjects in the input box, separated by commas (e.g., "Math, Physics, English").', 'Enter the number of study hours per day you plan to dedicate.', 'Click "Generate Timetable" to see your weekly schedule.', 'Use the "Print Timetable" button to print or save it as a PDF via your browser.'],
+        tips: 'The generator distributes subjects in a repeating cycle. If you have fewer subjects than study hours per day, subjects will repeat. For a more personalized schedule, consider which subjects need more time and adjust the hours accordingly. This tool provides a starting template — feel free to modify it to suit your actual availability.'
+    },
+    'scientific-calculator': {
+        intro: 'Scientific Calculator performs standard arithmetic as well as scientific functions including trigonometry, logarithms, square roots, and exponentiation. It uses a safe, locally-run expression parser with proper operator precedence.',
+        who: 'Students in math, science, or engineering courses who need a quick in-browser calculator for academic problems.',
+        steps: ['Click the number buttons and operators to build your expression in the display field.', 'For scientific functions (sin, cos, tan, log, sqrt), click the function button — an opening parenthesis will be added automatically. Close it with the ")" button.', 'Use "^" for exponentiation (e.g., 2^3 for 2 to the power of 3).', 'Press "=" to evaluate the expression.', 'Press "C" to clear the display and start a new calculation.'],
+        tips: 'Trigonometric functions (sin, cos, tan) accept values in radians, not degrees. To convert degrees to radians, multiply by π/180 (approximately 0.01745). Division by zero will display an error message rather than crashing the tool.'
+    },
+    'notes-to-study-guide': {
+        intro: 'Notes to Study Guide transforms your raw, unstructured lecture notes into a cleaner, organized study guide. The manual mode extracts capitalized key terms and formats the first few lines as key concepts. The AI mode produces a fully structured guide with headings, key terms, and review questions.',
+        who: 'Students who take messy or stream-of-consciousness notes during lectures and want a cleaner reference document for revision.',
+        steps: ['Optionally enter your OpenAI API key for the AI mode.', 'Paste your raw notes into the "Raw Notes" text box.', 'Click "Process Manually" for an instant basic extraction — no API key required.', 'Click "Process with AI" for a structured guide with headings, definitions, and review questions.', 'Copy the output using the "Copy Guide" button.'],
+        tips: 'The manual mode works best when your notes contain capitalized proper nouns and technical terms. The AI mode produces more useful results with notes that are at least a paragraph long. Very short inputs may not give the AI enough material to work with.'
+    },
+    'essay-structure-helper': {
+        intro: 'Essay Structure Helper generates a detailed structural outline for your essay based on your topic, essay type, and target word count. It breaks the plan into Introduction, Body Paragraphs, and Conclusion, with estimated word counts for each section.',
+        who: 'Students planning essays or research papers who want a clear structure before starting to write, or anyone who struggles with essay organization.',
+        steps: ['Enter your Essay Topic.', 'Select the Essay Type: Argumentative, Expository, or Narrative.', 'Set your Target Word Count.', 'Optionally add Key Arguments (comma separated) that you want your body paragraphs to cover.', 'Click "Generate Outline & Structure" to see your essay plan.'],
+        tips: 'The word counts for each section are approximate targets, not strict limits. The Introduction and Conclusion are each set to roughly 10% of your total word count, with the rest allocated to body paragraphs. Add your own specific evidence, examples, and transitions to flesh out the structure.'
+    },
+    'study-estimator': {
+        intro: 'Reading Time & Study Estimator calculates how long it will take to read a piece of material based on its word count and your reading speed. It also suggests how many 25-minute Pomodoro study sessions you might need.',
+        who: 'Students planning study sessions and needing to budget time for different reading materials, or anyone estimating how long it will take to finish an article or book chapter.',
+        steps: ['Enter the word count of the material you want to study.', 'Adjust the Reading Speed slider to match your typical pace. The default is 200 words per minute, which is an average reading speed.', 'Click "Estimate Time" to see the total reading time and the suggested number of 25-minute sessions.'],
+        tips: 'Reading speed varies significantly depending on the complexity of the material. Technical or academic content is often read at 100–150 wpm, while casual fiction can be read at 300 wpm or faster. Adjust the slider to reflect your realistic speed for the type of content you are studying.'
+    },
+    'code-explainer': {
+        intro: 'Code Explainer uses AI to analyze a piece of code, explain what it does in plain language, and identify any obvious bugs or issues. It supports Python, JavaScript, Java, and C++.',
+        who: 'Students learning to program who want to understand unfamiliar code, beginner developers debugging their own work, or anyone who encounters a code snippet and needs a quick explanation.',
+        steps: ['Enter your OpenAI API key in the field provided.', 'Select the programming Language from the dropdown.', 'Paste the code you want explained into the code input box.', 'Click "Explain Code" and wait for the AI response.', 'Read the explanation in the output area below.'],
+        tips: 'The AI explanation is based on the code you paste, so providing context in comments (e.g., what the function is supposed to do) can lead to a more accurate and useful response. The AI may miss subtle logical bugs — it is best suited for explaining code structure and catching obvious syntax or logic errors.'
+    },
+    'student-unit-converter': {
+        intro: 'Student Unit Converter converts common measurement units across Length, Mass, and Temperature. All conversions are calculated instantly in your browser with no server required.',
+        who: 'Students working on science, engineering, or math problems that require unit conversions, or anyone dealing with measurements in different unit systems.',
+        steps: ['Select a Category: Length, Mass, or Temperature.', 'Choose the unit you are converting From and the unit you are converting To using the dropdowns.', 'Enter the value you want to convert.', 'Click "Convert" to see the result.'],
+        tips: 'Temperature conversion uses exact mathematical formulas (not look-up tables), so decimal precision is maintained. Length and Mass conversions use precise reference values. For very large or very small numbers, scientific notation may appear in the result.'
+    },
+    'exam-countdown': {
+        intro: 'Exam Countdown tracks all your upcoming exams and shows exactly how many days remain until each one. Exams are sorted by date and color-coded — urgent exams appear in red when 3 or fewer days remain.',
+        who: 'Students who want a quick visual overview of all their upcoming exams to prioritize their study time effectively.',
+        steps: ['Enter the Exam Title (required) and optionally the Subject.', 'Set the Exam Date using the date picker.', 'Click "Add Exam" to save it to your countdown list.', 'Your exams are automatically sorted from nearest to furthest.', 'Click "Delete" next to any exam to remove it from the list.'],
+        tips: 'Exams that have already passed will show as "Passed" rather than a countdown. Your exam list is saved in your browser\'s local storage and will persist between visits. Remember to delete passed exams to keep your list clean.'
+    }
+};
+
+function getToolGuide(id) {
+    const g = TOOL_GUIDES[id];
+    if (!g) return '';
+    const stepsHtml = g.steps.map((s, i) => `<li><strong>${i + 1}.</strong> ${s}</li>`).join('');
+    const tipsHtml = g.tips ? `<div class="alert alert-info mt-4" style="margin-bottom:0"><i data-lucide="lightbulb"></i><strong>Tip: </strong>${g.tips}</div>` : '';
+    return `
+        <div class="glass-card" style="padding: 1.5rem 2rem; margin-bottom: 1.5rem;">
+            <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.7;">${g.intro}</p>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                <div>
+                    <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-color);">Who Is This For?</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">${g.who}</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-color);">How To Use</h4>
+                    <ol style="padding-left: 0; list-style: none; margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8;">${stepsHtml}</ol>
+                </div>
+            </div>
+            ${tipsHtml}
+        </div>
+    `;
+}
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
@@ -95,6 +273,12 @@ function initSearch() {
     });
 }
 
+function setPageMeta(title, description) {
+    document.title = title;
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute('content', description);
+}
+
 function initRouter() {
     const path = window.location.hash.slice(1) || '/';
     const app = document.getElementById('app-content');
@@ -103,32 +287,63 @@ function initRouter() {
     app.innerHTML = '';
 
     if (path === '/' || path === '') {
+        setPageMeta(
+            'Techvelo - Free Online Tools for Students & Professionals',
+            'Techvelo provides 25+ free online tools including AI text summarizer, PDF merger, image compressor, password generator, GPA calculator, citation generator, and more. No signup required.'
+        );
         renderHome(app);
     } else if (path === '/tools') {
+        setPageMeta(
+            'All Tools - Techvelo',
+            'Browse all 25+ free online tools on Techvelo. Text tools, AI tools, PDF tools, image utilities, and university student tools — all in one place.'
+        );
         renderAllTools(app);
     } else if (path.startsWith('/tools/')) {
         const toolId = path.split('/')[2];
         const tool = TOOLS.find(t => t.id === toolId);
         if (tool) {
+            setPageMeta(
+                `${tool.name} - Free Online Tool | Techvelo`,
+                `${tool.description} Use ${tool.name} free online at Techvelo — no signup required.`
+            );
             renderToolPage(app, tool);
         } else {
+            setPageMeta('Tool Not Found - Techvelo', 'The requested tool could not be found on Techvelo.');
             app.innerHTML = '<div class="text-center section-title">Tool not found</div>';
         }
     } else if (path === '/about') {
+        setPageMeta(
+            'About Us - Techvelo',
+            'Learn about Techvelo, our mission to make everyday digital tasks easier, and the tools we provide for students, professionals, and general users.'
+        );
         renderAboutPage(app);
     } else if (path === '/contact') {
+        setPageMeta(
+            'Contact Us - Techvelo',
+            'Get in touch with the Techvelo team. We welcome feedback, questions, and suggestions about our free online tools.'
+        );
         renderContactPage(app);
     } else if (path === '/privacy') {
+        setPageMeta(
+            'Privacy Policy - Techvelo',
+            'Read the Techvelo Privacy Policy to understand how we handle your data. Techvelo does not collect personal data and all tool processing happens in your browser.'
+        );
         renderPrivacyPage(app);
     } else if (path === '/terms') {
+        setPageMeta(
+            'Terms & Conditions - Techvelo',
+            'Read the Techvelo Terms & Conditions governing your use of our free online tools and website.'
+        );
         renderTermsPage(app);
     } else {
+        setPageMeta('Page Not Found - Techvelo', 'The page you are looking for does not exist on Techvelo.');
         app.innerHTML = '<div class="text-center section-title">Page not found</div>';
     }
     
     window.scrollTo(0, 0);
     lucide.createIcons();
 }
+
 
 function createToolCard(tool) {
     return `
@@ -250,11 +465,13 @@ function renderToolPage(container, tool) {
     `;
 
     const toolUI = getToolUI(tool.id);
+    const guide = getToolGuide(tool.id);
     
     container.innerHTML = `
         <div class="tool-page">
             ${breadcrumbs}
             ${header}
+            ${guide}
             <div class="glass-card tool-container">
                 ${toolUI}
             </div>
@@ -264,6 +481,7 @@ function renderToolPage(container, tool) {
     // Initialize specific tool logic
     initToolLogic(tool.id);
 }
+
 
 // ==========================================
 // TOOL UI TEMPLATES & LOGIC

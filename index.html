@@ -3,8 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Techvelo - Smart Tools. Simple Solutions.</title>
-    <meta name="description" content="Techvelo offers premium, free online tools for everyday tasks including AI, PDF, text, and image utilities.">
+
+    <!-- Primary SEO -->
+    <title>Techvelo - Free Online Tools for Students & Professionals</title>
+    <meta name="description" content="Techvelo provides 25+ free online tools including AI text summarizer, PDF merger, image compressor, password generator, GPA calculator, citation generator, and more. No signup required.">
+    <meta name="keywords" content="free online tools, AI summarizer, PDF merger, image compressor, password generator, word counter, GPA calculator, citation generator, flashcard maker, student tools">
+    <meta name="author" content="Techvelo">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3b82f6">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://techvelo.vercel.app/">
+
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="f74436bea3ba5377">
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Techvelo">
+    <meta property="og:title" content="Techvelo - Free Online Tools for Students & Professionals">
+    <meta property="og:description" content="25+ free online tools in one place. AI summarizer, PDF tools, image utilities, student study tools, and more. No signup required.">
+    <meta property="og:url" content="https://techvelo.vercel.app/">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Techvelo - Free Online Tools for Students & Professionals">
+    <meta name="twitter:description" content="25+ free online tools in one place. AI summarizer, PDF tools, image utilities, student study tools, and more.">
+    <meta name="twitter:site" content="@techvelo">
+
     <link rel="stylesheet" href="style.css">
     
     <!-- Google Fonts -->
@@ -27,10 +54,10 @@
 <body>
     <div class="background-mesh"></div>
 
-    <nav class="navbar glass">
+    <nav class="navbar glass" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
-            <a href="#/" class="logo">
-                <i data-lucide="zap"></i> Techvelo
+            <a href="#/" class="logo" aria-label="Techvelo home">
+                <i data-lucide="zap" aria-hidden="true"></i> Techvelo
             </a>
             
             <div class="search-container">
@@ -48,8 +75,8 @@
                 </button>
             </div>
             
-            <button id="mobile-menu-btn" class="mobile-only icon-btn">
-                <i data-lucide="menu"></i>
+            <button id="mobile-menu-btn" class="mobile-only icon-btn" aria-label="Open mobile menu" aria-expanded="false" aria-controls="mobile-menu">
+                <i data-lucide="menu" aria-hidden="true"></i>
             </button>
         </div>
         
@@ -60,8 +87,8 @@
         </div>
     </nav>
 
-    <main id="app-content">
-        <!-- Content will be injected here by script.js -->
+    <main id="app-content" role="main">
+        <!-- Content is rendered by JavaScript routing -->
     </main>
 
     <footer class="footer glass">

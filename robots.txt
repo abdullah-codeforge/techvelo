@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block access to git internals
+Disallow: /.git/
+
+Sitemap: https://techvelo.vercel.app/sitemap.xml
