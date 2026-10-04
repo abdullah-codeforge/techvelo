@@ -24,60 +24,46 @@ function pageShell(title, subtitle, bodyHTML) {
 function renderAboutPage(container) {
     document.title = 'About Us — Techvelo';
     container.innerHTML = pageShell(
-        'About Techvelo',
-        'Smart Tools. Simple Solutions.',
+        'About Us',
+        'Making everyday digital tasks easier for everyone.',
         `
         <div class="static-section">
             <h2>Who We Are</h2>
-            <p>Techvelo is a free, browser-based toolkit designed for students, developers, and everyday users who need reliable online tools without clutter, sign-ups, or hidden fees. Our platform runs entirely in your browser — no accounts, no servers storing your files, no subscriptions.</p>
+            <p>Techvelo is an online platform designed to make everyday digital tasks easier. We provide useful online tools for students, professionals, and general users, all in one place.</p>
         </div>
 
         <div class="static-section">
-            <h2>Our Mission</h2>
-            <p>We believe that powerful digital tools should be accessible to everyone. Techvelo was built to give anyone a clean, fast, and honest collection of utilities — from PDF manipulation and image editing to AI-assisted writing and academic planning — all in one place.</p>
+            <h2>Our Goal</h2>
+            <p>Our goal is to offer simple, accessible, and user-friendly tools that help people save time, improve productivity, and complete their tasks efficiently.</p>
         </div>
 
         <div class="about-values-grid">
             <div class="about-value-card glass-card">
-                <div class="about-value-icon"><i data-lucide="shield-check"></i></div>
-                <h3>Privacy First</h3>
-                <p>Most tools process your data entirely inside your own browser. Nothing is uploaded unless you explicitly invoke an external AI service.</p>
+                <div class="about-value-icon"><i data-lucide="users"></i></div>
+                <h3>For Everyone</h3>
+                <p>Built for students, professionals, and general users — no sign-up required, no barriers to access.</p>
             </div>
             <div class="about-value-card glass-card">
                 <div class="about-value-icon"><i data-lucide="zap"></i></div>
-                <h3>Fast &amp; Free</h3>
-                <p>No paywalls, no account required, no ads interrupting your workflow. Just tools that work.</p>
+                <h3>Save Time</h3>
+                <p>Get things done faster with tools designed to streamline repetitive and time-consuming digital tasks.</p>
             </div>
             <div class="about-value-card glass-card">
-                <div class="about-value-icon"><i data-lucide="graduation-cap"></i></div>
-                <h3>Built for Learners</h3>
-                <p>A dedicated University Student Tools category helps with GPA calculation, flashcards, essay planning, exam countdowns, and more.</p>
+                <div class="about-value-icon"><i data-lucide="layout-grid"></i></div>
+                <h3>All in One Place</h3>
+                <p>Everything you need in a single platform — no need to jump between multiple websites or apps.</p>
             </div>
             <div class="about-value-card glass-card">
-                <div class="about-value-icon"><i data-lucide="code-2"></i></div>
-                <h3>Developer Friendly</h3>
-                <p>Tools like the JSON Formatter, Password Generator, and Code Explainer are built with developers' real-world needs in mind.</p>
+                <div class="about-value-icon"><i data-lucide="trending-up"></i></div>
+                <h3>Always Improving</h3>
+                <p>We are continuously working to improve our tools and user experience based on real feedback.</p>
             </div>
         </div>
 
         <div class="static-section">
-            <h2>What Techvelo Offers</h2>
-            <ul class="static-list">
-                <li><strong>25 tools</strong> across Text, AI, Image, PDF, Developer, and University Student categories.</li>
-                <li>All image and document processing happens <strong>locally in your browser</strong> using Web APIs — your files never leave your device.</li>
-                <li>AI-powered tools (Summarizer, Rewriter, Code Explainer) connect <strong>directly to OpenAI</strong> using a key you provide — Techvelo never stores or forwards your key.</li>
-                <li>Student tools save data to your browser's <strong>local storage</strong>, which only you can access on your device.</li>
-            </ul>
-        </div>
-
-        <div class="static-section">
-            <h2>Honesty Policy</h2>
-            <p>We do not claim certifications, awards, or user statistics that are not real. We do not publish fake testimonials. If a tool requires an external API key, we say so clearly rather than pretending the feature works without one.</p>
-        </div>
-
-        <div class="static-section">
-            <h2>Future Plans</h2>
-            <p>Techvelo is actively growing. Planned additions include more AI tools, collaboration features, a browser extension, and wider language support. The codebase is structured so new tools can be added without rebuilding the site.</p>
+            <h2>Our Commitment</h2>
+            <p>At Techvelo, we are continuously working to improve our tools and user experience. We believe powerful digital tools should be simple, accessible, and free for everyone to use.</p>
+            <p>Have a suggestion or found something that could be better? We'd love to hear from you via our <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page.</p>
         </div>
         `
     );
