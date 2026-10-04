@@ -186,19 +186,51 @@ function renderAllTools(container) {
             <h1>All Tools</h1>
             <p>Browse our collection of smart, simple solutions.</p>
         </div>
+        <div class="input-group" style="max-width: 600px; margin: 0 auto 3rem auto; text-align: left;">
+            <div style="position: relative;">
+                <input type="text" id="tools-search" placeholder="Search tools by name, description, or category..." style="width:100%; padding: 1rem 1rem 1rem 3rem; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-color); color: var(--text-primary); font-size: 1rem;">
+                <i data-lucide="search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
+            </div>
+        </div>
+        <div id="tools-container"></div>
     `;
     
-    CATEGORIES.forEach(cat => {
-        const catTools = TOOLS.filter(t => t.category === cat);
-        html += `
-            <h2 class="section-title" style="margin-top: 3rem; font-size: 1.5rem;">${cat}</h2>
-            <div class="grid">
-                ${catTools.map(createToolCard).join('')}
-            </div>
-        `;
-    });
-    
     container.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+    
+    const toolsContainer = document.getElementById('tools-container');
+    const searchInput = document.getElementById('tools-search');
+    
+    const renderFiltered = (query = '') => {
+        let out = '';
+        const q = query.toLowerCase().trim();
+        
+        let foundAny = false;
+        CATEGORIES.forEach(cat => {
+            const catTools = TOOLS.filter(t => 
+                t.category === cat && 
+                (t.name.toLowerCase().includes(q) || t.description.toLowerCase().includes(q) || t.category.toLowerCase().includes(q))
+            );
+            if (catTools.length > 0) {
+                foundAny = true;
+                out += `
+                    <h2 class="section-title" style="margin-top: 3rem; font-size: 1.5rem;">${cat}</h2>
+                    <div class="grid">
+                        ${catTools.map(createToolCard).join('')}
+                    </div>
+                `;
+            }
+        });
+        
+        if (!foundAny) {
+            out = `<div class="text-center" style="padding: 3rem; color: var(--text-secondary); font-size: 1.2rem;">No tools found matching "${query}".</div>`;
+        }
+        toolsContainer.innerHTML = out;
+        if (window.lucide) lucide.createIcons();
+    };
+    
+    searchInput.addEventListener('input', (e) => renderFiltered(e.target.value));
+    renderFiltered();
 }
 
 function renderToolPage(container, tool) {

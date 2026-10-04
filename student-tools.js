@@ -22,6 +22,34 @@ if (!CATEGORIES.includes('University Student Tools')) {
     CATEGORIES.push('University Student Tools');
 }
 
+// Validation UI Helpers
+window.showInlineError = function(btnId, msg) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    let err = btn.previousElementSibling;
+    if (!err || !err.classList.contains('inline-err')) {
+        err = document.createElement('div');
+        err.className = 'alert inline-err mb-4';
+        err.style.color = '#ef4444';
+        err.style.border = '1px solid #ef4444';
+        err.style.background = 'rgba(239, 68, 68, 0.1)';
+        err.style.padding = '0.75rem';
+        err.style.borderRadius = '8px';
+        btn.parentNode.insertBefore(err, btn);
+    }
+    err.innerText = msg;
+    err.classList.remove('hidden');
+};
+
+window.clearInlineError = function(btnId) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    const err = btn.previousElementSibling;
+    if (err && err.classList.contains('inline-err')) {
+        err.classList.add('hidden');
+    }
+};
+
 // Intercept getToolUI
 const originalGetToolUI = window.getToolUI;
 window.getToolUI = function(id) {
@@ -66,12 +94,19 @@ function getStudentToolUI(id) {
             <div class="input-group"><label>Source Type</label>
                 <select id="cg-type"><option value="Book">Book</option><option value="Website">Website</option><option value="Journal">Journal Article</option></select>
             </div>
+            <div id="cg-error" class="alert hidden mb-4" style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444;"></div>
             <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="input-group"><label>Author (Last, First)</label><input type="text" id="cg-author"></div>
-                <div class="input-group"><label>Title</label><input type="text" id="cg-title"></div>
+                <div class="input-group"><label id="cg-author-label">Author (Last, First) *</label><input type="text" id="cg-author"></div>
+                <div class="input-group"><label>Title *</label><input type="text" id="cg-title"></div>
                 <div class="input-group"><label>Year</label><input type="text" id="cg-year"></div>
-                <div class="input-group"><label>Publisher / Website Name</label><input type="text" id="cg-publisher"></div>
-                <div class="input-group"><label>URL</label><input type="text" id="cg-url"></div>
+                
+                <div class="input-group" id="cg-group-pub"><label id="cg-pub-label">Publisher</label><input type="text" id="cg-publisher"></div>
+                <div class="input-group hidden" id="cg-group-month-day"><label>Month & Day (e.g., Oct 4)</label><input type="text" id="cg-month-day"></div>
+                
+                <div class="input-group hidden" id="cg-group-vol"><label>Volume(Issue)</label><input type="text" id="cg-vol" placeholder="e.g. 12(3)"></div>
+                <div class="input-group hidden" id="cg-group-pages"><label>Page Range</label><input type="text" id="cg-pages" placeholder="e.g. 401-415"></div>
+
+                <div class="input-group" id="cg-group-url" style="grid-column: span 2;"><label>URL / DOI</label><input type="text" id="cg-url"></div>
             </div>
             <button class="btn-primary" id="cg-generate">Generate Citation</button>
             <div class="alert alert-info mt-4"><i data-lucide="info"></i> Please verify citation format against your specific institution's guidelines.</div>
@@ -360,7 +395,8 @@ function initAssignmentPlanner() {
         const subject = document.getElementById('ap-subject').value;
         const date = document.getElementById('ap-date').value;
         const priority = document.getElementById('ap-priority').value;
-        if(!title || !date) return alert('Title and Date required');
+        window.clearInlineError('ap-add');
+        if(!title || !date) return window.showInlineError('ap-add', 'Title and Date required');
         assignments.push({title, subject, date, priority, completed: false});
         localStorage.setItem('techvelo_assignments', JSON.stringify(assignments));
         render();
@@ -373,23 +409,103 @@ function initAssignmentPlanner() {
 }
 
 function initCitationGenerator() {
+    const typeSelect = document.getElementById('cg-type');
+    const pubLabel = document.getElementById('cg-pub-label');
+    const authorLabel = document.getElementById('cg-author-label');
+    const groupMonthDay = document.getElementById('cg-group-month-day');
+    const groupVol = document.getElementById('cg-group-vol');
+    const groupPages = document.getElementById('cg-group-pages');
+    const errorBox = document.getElementById('cg-error');
+
+    typeSelect.addEventListener('change', () => {
+        const type = typeSelect.value;
+        // Reset visibility
+        groupMonthDay.classList.add('hidden');
+        groupVol.classList.add('hidden');
+        groupPages.classList.add('hidden');
+        
+        if (type === 'Book') {
+            pubLabel.innerText = 'Publisher';
+            authorLabel.innerText = 'Author (Last, First) *';
+        } else if (type === 'Website') {
+            pubLabel.innerText = 'Website Name';
+            authorLabel.innerText = 'Author or Organization *';
+            groupMonthDay.classList.remove('hidden');
+        } else if (type === 'Journal') {
+            pubLabel.innerText = 'Journal Name';
+            authorLabel.innerText = 'Author (Last, First) *';
+            groupVol.classList.remove('hidden');
+            groupPages.classList.remove('hidden');
+        }
+    });
+
     document.getElementById('cg-generate').addEventListener('click', () => {
+        if (errorBox) errorBox.classList.add('hidden');
+        
         const style = document.getElementById('cg-style').value;
-        const type = document.getElementById('cg-type').value;
-        const author = document.getElementById('cg-author').value || 'Unknown';
-        const title = document.getElementById('cg-title').value || 'Untitled';
-        const year = document.getElementById('cg-year').value || 'n.d.';
-        const pub = document.getElementById('cg-publisher').value || '';
-        const url = document.getElementById('cg-url').value || '';
+        const type = typeSelect.value;
         
+        const author = document.getElementById('cg-author').value.trim();
+        const title = document.getElementById('cg-title').value.trim();
+        const year = document.getElementById('cg-year').value.trim();
+        const pub = document.getElementById('cg-publisher').value.trim();
+        const url = document.getElementById('cg-url').value.trim();
+        
+        const monthDay = document.getElementById('cg-month-day') ? document.getElementById('cg-month-day').value.trim() : '';
+        const vol = document.getElementById('cg-vol') ? document.getElementById('cg-vol').value.trim() : '';
+        const pages = document.getElementById('cg-pages') ? document.getElementById('cg-pages').value.trim() : '';
+        
+        if (!author || !title) {
+            errorBox.innerText = 'Author and Title are required fields.';
+            errorBox.classList.remove('hidden');
+            return;
+        }
+
         let res = '';
-        if(style === 'APA') res = `${author}. (${year}). *${title}*. ${pub}. ${url}`;
-        if(style === 'MLA') res = `${author}. "${title}." *${pub}*, ${year}, ${url}.`;
-        if(style === 'Chicago') res = `${author}. *${title}*. ${pub}, ${year}. ${url}.`;
-        if(style === 'Harvard') res = `${author}, ${year}. *${title}*. ${pub}. Available at: ${url}.`;
         
+        if (style === 'APA') {
+            if (type === 'Book') {
+                res = `${author}. `;
+                res += year ? `(${year}). ` : `(n.d.). `;
+                res += `<i>${title}</i>.`;
+                if (pub) res += ` ${pub}.`;
+            } 
+            else if (type === 'Website') {
+                res = `${author}. `;
+                let dateStr = year ? year : 'n.d.';
+                if (year && monthDay) dateStr = `${year}, ${monthDay}`;
+                res += `(${dateStr}). `;
+                res += `<i>${title}</i>.`;
+                if (pub) res += ` ${pub}.`;
+                if (url) res += ` ${url}`;
+            } 
+            else if (type === 'Journal') {
+                res = `${author}. `;
+                res += year ? `(${year}). ` : `(n.d.). `;
+                res += `${title}. `;
+                if (pub) res += `<i>${pub}</i>`;
+                if (vol) res += pub ? `, ${vol}` : `${vol}`;
+                if (pages) res += (pub || vol) ? `, ${pages}` : `${pages}`;
+                if (pub || vol || pages) res += `.`;
+                if (url) res += ` ${url}`;
+            }
+        } 
+        else {
+            let dispYear = year || 'n.d.';
+            if (style === 'MLA') res = `${author}. "${title}." <i>${pub}</i>, ${dispYear}, ${url}.`;
+            if (style === 'Chicago') res = `${author}. <i>${title}</i>. ${pub}, ${dispYear}. ${url}.`;
+            if (style === 'Harvard') res = `${author}, ${dispYear}. <i>${title}</i>. ${pub}. Available at: ${url}.`;
+            
+            res = res.replace(/, ,/g, ',').replace(/\. \./g, '.').replace(/\. ,/g, '.').replace(/<i><\/i>/g, '').trim();
+            if (res.endsWith(',') || res.endsWith(',.')) res = res.replace(/,\.?$/, '.');
+        }
+        
+        res = res.replace(/\s+/g, ' ').replace(/\.\./g, '.').replace(/\s\./g, '.').trim();
+        if (!res.endsWith('.') && !url) res += '.';
+
         document.getElementById('cg-output').innerHTML = res;
     });
+    
     document.getElementById('cg-copy').addEventListener('click', e => copyToClipboard(document.getElementById('cg-output').innerText, e.target));
 }
 
@@ -411,7 +527,8 @@ function initResearchOrganizer() {
     
     document.getElementById('ro-add').addEventListener('click', () => {
         const title = document.getElementById('ro-title').value;
-        if(!title) return alert('Title is required');
+        window.clearInlineError('ro-add');
+        if(!title) return window.showInlineError('ro-add', 'Title is required');
         sources.push({
             title,
             author: document.getElementById('ro-author').value,
@@ -455,7 +572,8 @@ function initPresentationOutline() {
         const output = document.getElementById('po-output');
         const loading = document.getElementById('po-loading');
 
-        if(!topic) return alert('Topic required.');
+        window.clearInlineError('po-generate');
+        if(!topic) return window.showInlineError('po-generate', 'Topic required.');
         loading.classList.remove('hidden'); output.innerHTML = '';
         
         if (key) {
@@ -503,7 +621,8 @@ function initFlashcardMaker() {
     document.getElementById('fc-add').addEventListener('click', () => {
         const front = document.getElementById('fc-front').value;
         const back = document.getElementById('fc-back').value;
-        if(!front || !back) return alert('Both sides required');
+        window.clearInlineError('fc-add');
+        if(!front || !back) return window.showInlineError('fc-add', 'Both sides required');
         cards.push({front, back});
         localStorage.setItem('techvelo_flashcards', JSON.stringify(cards));
         document.getElementById('fc-front').value = ''; document.getElementById('fc-back').value = '';
@@ -514,6 +633,57 @@ function initFlashcardMaker() {
     document.getElementById('fc-next').addEventListener('click', () => { if(current < cards.length-1) { current++; showingFront = true; render(); }});
     document.getElementById('fc-prev').addEventListener('click', () => { if(current > 0) { current--; showingFront = true; render(); }});
     
+    // Export Deck Logic
+    document.getElementById('fc-export').addEventListener('click', () => {
+        if(cards.length === 0) return alert('No flashcards to export.');
+        const blob = new Blob([JSON.stringify(cards, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); 
+        a.href = url; 
+        a.download = 'flashcards_deck.json'; 
+        a.click();
+    });
+
+    // Import Deck Logic
+    const imp = document.getElementById('fc-import');
+    document.getElementById('fc-import-btn').addEventListener('click', () => imp.click());
+    
+    imp.addEventListener('change', (e) => {
+        if (!e.target.files[0]) return;
+        const r = new FileReader();
+        r.onload = ev => {
+            try {
+                const importedCards = JSON.parse(ev.target.result);
+                if (!Array.isArray(importedCards)) throw new Error('Invalid file format. Expected a JSON array.');
+                
+                let added = 0;
+                importedCards.forEach(c => {
+                    if (c && typeof c.front === 'string' && typeof c.back === 'string' && c.front.trim() && c.back.trim()) {
+                        // Prevent exact duplicates
+                        const exists = cards.some(existing => existing.front === c.front.trim() && existing.back === c.back.trim());
+                        if (!exists) {
+                            cards.push({front: c.front.trim(), back: c.back.trim()});
+                            added++;
+                        }
+                    }
+                });
+                
+                if (added > 0) {
+                    localStorage.setItem('techvelo_flashcards', JSON.stringify(cards));
+                    render();
+                    alert(`Successfully imported ${added} new flashcards.`);
+                } else {
+                    alert('No valid new flashcards found to import (they might be duplicates or incorrectly formatted).');
+                }
+            } catch(err) {
+                alert('Failed to import deck. ' + err.message);
+            }
+        };
+        r.readAsText(e.target.files[0]);
+        // Reset the file input so the same file can be selected again if needed
+        e.target.value = '';
+    });
+    
     render();
 }
 
@@ -522,6 +692,18 @@ function initQuizGenerator() {
     const keyEl = document.getElementById('qg-key');
     keyEl.value = localStorage.getItem('techvelo_openai_key') || '';
     keyEl.addEventListener('change', e => localStorage.setItem('techvelo_openai_key', e.target.value));
+
+    document.getElementById('qg-play-area').addEventListener('click', (e) => {
+        if (e.target && e.target.id === 'qg-submit') {
+            let score = 0;
+            qs.forEach((q, i) => {
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                if(sel && sel.value === q.correct) score++;
+            });
+            document.getElementById('qg-res').innerText = `Score: ${score} / ${qs.length}`;
+            e.target.disabled = true;
+        }
+    });
 
     const render = () => {
         const area = document.getElementById('qg-play-area');
@@ -537,17 +719,6 @@ function initQuizGenerator() {
                 </div>
             </div>
         `).join('') + `<button class="btn-primary" id="qg-submit">Submit Quiz</button><div id="qg-res" class="mt-4" style="font-weight:bold; font-size:1.2rem"></div>`;
-        
-        setTimeout(() => {
-            document.getElementById('qg-submit')?.addEventListener('click', () => {
-                let score = 0;
-                qs.forEach((q, i) => {
-                    const sel = document.querySelector(`input[name="q${i}"]:checked`);
-                    if(sel && sel.value === q.correct) score++;
-                });
-                document.getElementById('qg-res').innerText = `Score: ${score} / ${qs.length}`;
-            });
-        }, 100);
     };
 
     document.getElementById('qg-add-manual').addEventListener('click', () => {
@@ -567,7 +738,8 @@ function initQuizGenerator() {
     document.getElementById('qg-ai-btn').addEventListener('click', async () => {
         const notes = document.getElementById('qg-notes').value;
         const key = keyEl.value.trim();
-        if(!notes || !key) return alert('Notes and API Key required for AI generation.');
+        window.clearInlineError('qg-ai-btn');
+        if(!notes || !key) return window.showInlineError('qg-ai-btn', 'Notes and API Key required for AI generation.');
         document.getElementById('qg-loading').classList.remove('hidden');
         try {
             const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -628,7 +800,8 @@ function initStudyTimetable() {
     document.getElementById('tt-generate').addEventListener('click', () => {
         const subs = document.getElementById('tt-subjects').value.split(',').map(s=>s.trim()).filter(Boolean);
         const hours = parseInt(document.getElementById('tt-hours').value) || 4;
-        if(!subs.length) return alert('Enter subjects');
+        window.clearInlineError('tt-generate');
+        if(!subs.length) return window.showInlineError('tt-generate', 'Enter subjects');
         
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         let html = '';
@@ -652,17 +825,82 @@ function initScientificCalculator() {
     // Very basic safe evaluation mapping
     const safeEval = (str) => {
         try {
-            // Replace functions with JS Math counterparts
-            let parsed = str.replace(/sin/g, 'Math.sin')
-                            .replace(/cos/g, 'Math.cos')
-                            .replace(/tan/g, 'Math.tan')
-                            .replace(/log/g, 'Math.log10')
-                            .replace(/sqrt/g, 'Math.sqrt')
-                            .replace(/\^/g, '**');
-            // Check for invalid chars to prevent execution of arbitrary code
-            if(/[^0-9Math\.\(\)\+\-\*\/\%\*\*\, ]/.test(parsed)) throw new Error('Invalid');
-            return new Function('return ' + parsed)();
-        } catch(e) { return 'Error'; }
+            if (!str) return '';
+            str = str.replace(/\s+/g, '');
+            let pos = 0;
+            
+            function parseAddSub() {
+                let res = parseMulDiv();
+                while (pos < str.length) {
+                    if (str[pos] === '+') { pos++; res += parseMulDiv(); }
+                    else if (str[pos] === '-') { pos++; res -= parseMulDiv(); }
+                    else break;
+                }
+                return res;
+            }
+            
+            function parseMulDiv() {
+                let res = parsePow();
+                while (pos < str.length) {
+                    if (str[pos] === '*') { pos++; res *= parsePow(); }
+                    else if (str[pos] === '/') { 
+                        pos++; 
+                        let right = parsePow();
+                        if (right === 0) throw new Error("Division by zero");
+                        res /= right; 
+                    }
+                    else if (str[pos] === '%') { pos++; res %= parsePow(); }
+                    else break;
+                }
+                return res;
+            }
+            
+            function parsePow() {
+                let res = parseFactor();
+                while (pos < str.length && str[pos] === '^') {
+                    pos++;
+                    res = Math.pow(res, parsePow());
+                }
+                return res;
+            }
+            
+            function parseFactor() {
+                if (pos >= str.length) throw new Error("Unexpected end of expression");
+                let c = str[pos];
+                if (c === '+') { pos++; return parseFactor(); }
+                if (c === '-') { pos++; return -parseFactor(); }
+                if (c === '(') {
+                    pos++;
+                    let res = parseAddSub();
+                    if (pos >= str.length || str[pos] !== ')') throw new Error("Missing closing parenthesis");
+                    pos++;
+                    return res;
+                }
+                
+                const funcs = ['sin', 'cos', 'tan', 'log', 'sqrt'];
+                for (let f of funcs) {
+                    if (str.startsWith(f, pos)) {
+                        pos += f.length;
+                        if (pos >= str.length || str[pos] !== '(') throw new Error("Expected '(' after function");
+                        let val = parseFactor();
+                        if (f === 'sin') return Math.sin(val);
+                        if (f === 'cos') return Math.cos(val);
+                        if (f === 'tan') return Math.tan(val);
+                        if (f === 'log') return Math.log10(val);
+                        if (f === 'sqrt') return Math.sqrt(val);
+                    }
+                }
+                
+                let start = pos;
+                while (pos < str.length && (/[0-9\.]/.test(str[pos]))) pos++;
+                if (start === pos) throw new Error("Expected number");
+                return parseFloat(str.substring(start, pos));
+            }
+            
+            let result = parseAddSub();
+            if (pos < str.length) throw new Error("Unexpected character at end");
+            return parseFloat(result.toPrecision(12));
+        } catch(e) { return 'Error: ' + e.message; }
     };
 
     btns.forEach(btn => {
@@ -700,7 +938,8 @@ function initNotesToStudyGuide() {
     document.getElementById('nsg-ai').addEventListener('click', async () => {
         const text = document.getElementById('nsg-input').value;
         const key = keyEl.value;
-        if(!text || !key) return alert('Notes and API Key required for AI.');
+        window.clearInlineError('nsg-ai');
+        if(!text || !key) return window.showInlineError('nsg-ai', 'Notes and API Key required for AI.');
         document.getElementById('nsg-loading').classList.remove('hidden');
         try {
             const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -777,7 +1016,8 @@ function initCodeExplainer() {
         const key = keyEl.value;
         const out = document.getElementById('ce-output');
         
-        if(!code || !key) return alert('Code and API Key required.');
+        window.clearInlineError('ce-btn');
+        if(!code || !key) return window.showInlineError('ce-btn', 'Code and API Key required.');
         document.getElementById('ce-loading').classList.remove('hidden');
         out.innerHTML = '';
         try {
@@ -873,7 +1113,8 @@ function initExamCountdown() {
         const title = document.getElementById('ec-title').value;
         const sub = document.getElementById('ec-subject').value;
         const date = document.getElementById('ec-date').value;
-        if(!title || !date) return alert('Title and date required');
+        window.clearInlineError('ec-add');
+        if(!title || !date) return window.showInlineError('ec-add', 'Title and date required');
         exams.push({title, subject: sub, date});
         localStorage.setItem('techvelo_exams', JSON.stringify(exams));
         render();
