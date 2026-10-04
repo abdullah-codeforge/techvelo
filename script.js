@@ -262,7 +262,7 @@ function initSearch() {
               `).join('')
             : '<div style="padding: 1rem; color: var(--text-secondary)">No tools found.</div>';
             
-        lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
         results.classList.remove('hidden');
     });
 
@@ -341,7 +341,7 @@ function initRouter() {
     }
     
     window.scrollTo(0, 0);
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 }
 
 

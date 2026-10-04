@@ -67,7 +67,7 @@ function renderAboutPage(container) {
         </div>
         `
     );
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 }
 
 // ------------------------------------
@@ -152,7 +152,7 @@ function renderContactPage(container) {
         `
     );
 
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 
     // ---- Formspree endpoint ----
     const FORMSPREE_URL = 'https://formspree.io/f/mljdqvgw';
@@ -240,7 +240,7 @@ function renderContactPage(container) {
             submitBtn.disabled = false;
             btnLabel.textContent = 'Send Message';
             submitBtn.style.opacity = '';
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
     });
 }
@@ -321,7 +321,7 @@ function renderPrivacyPage(container) {
         </div>
         `
     );
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 }
 
 // ------------------------------------
@@ -395,5 +395,5 @@ function renderTermsPage(container) {
         </div>
         `
     );
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 }
