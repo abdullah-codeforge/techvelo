@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary SEO -->
     <title>Techvelo - Free Online Tools for Students & Professionals</title>
-    <meta name="description" content="Techvelo provides 25+ free online tools including AI text summarizer, PDF merger, image compressor, password generator, GPA calculator, citation generator, and more. No signup required.">
-    <meta name="keywords" content="free online tools, AI summarizer, PDF merger, image compressor, password generator, word counter, GPA calculator, citation generator, flashcard maker, student tools">
+    <meta name="description"
+        content="Techvelo provides 25+ free online tools including AI text summarizer, PDF merger, image compressor, password generator, GPA calculator, citation generator, and more. No signup required.">
+    <meta name="keywords"
+        content="free online tools, AI summarizer, PDF merger, image compressor, password generator, word counter, GPA calculator, citation generator, flashcard maker, student tools">
     <meta name="author" content="Techvelo">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#3b82f6">
@@ -22,35 +25,40 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Techvelo">
     <meta property="og:title" content="Techvelo - Free Online Tools for Students & Professionals">
-    <meta property="og:description" content="25+ free online tools in one place. AI summarizer, PDF tools, image utilities, student study tools, and more. No signup required.">
+    <meta property="og:description"
+        content="25+ free online tools in one place. AI summarizer, PDF tools, image utilities, student study tools, and more. No signup required.">
     <meta property="og:url" content="https://techvelo.vercel.app/">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Techvelo - Free Online Tools for Students & Professionals">
-    <meta name="twitter:description" content="25+ free online tools in one place. AI summarizer, PDF tools, image utilities, student study tools, and more.">
+    <meta name="twitter:description"
+        content="25+ free online tools in one place. AI summarizer, PDF tools, image utilities, student study tools, and more.">
     <meta name="twitter:site" content="@techvelo">
 
     <link rel="stylesheet" href="style.css">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- PDF Lib for merging -->
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    
+
     <!-- PDF.js for rendering PDF to image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5169603705995617"
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="background-mesh"></div>
 
@@ -59,7 +67,7 @@
             <a href="#/" class="logo" aria-label="Techvelo home">
                 <i data-lucide="zap" aria-hidden="true"></i> Techvelo
             </a>
-            
+
             <div class="search-container">
                 <i data-lucide="search" class="search-icon"></i>
                 <input type="text" id="global-search" placeholder="Search for a tool...">
@@ -74,12 +82,13 @@
                     <i data-lucide="moon"></i>
                 </button>
             </div>
-            
-            <button id="mobile-menu-btn" class="mobile-only icon-btn" aria-label="Open mobile menu" aria-expanded="false" aria-controls="mobile-menu">
+
+            <button id="mobile-menu-btn" class="mobile-only icon-btn" aria-label="Open mobile menu"
+                aria-expanded="false" aria-controls="mobile-menu">
                 <i data-lucide="menu" aria-hidden="true"></i>
             </button>
         </div>
-        
+
         <div id="mobile-menu" class="mobile-menu glass hidden">
             <a href="#/">Home</a>
             <a href="#/tools">All Tools</a>
@@ -113,4 +122,5 @@
     <script src="pages.js"></script>
     <script src="student-tools.js"></script>
 </body>
+
 </html>
