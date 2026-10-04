@@ -328,81 +328,70 @@ function renderPrivacyPage(container) {
 // TERMS & CONDITIONS
 // ------------------------------------
 function renderTermsPage(container) {
-    document.title = 'Terms of Service — Techvelo';
+    document.title = 'Terms & Conditions — Techvelo';
     container.innerHTML = pageShell(
-        'Terms of Service',
-        'Please read these terms before using Techvelo.',
+        'Terms & Conditions',
+        'Last Updated: October 2026',
         `
         <div class="static-section">
-            <p>By accessing or using Techvelo ("the website", "the service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use Techvelo.</p>
+            <h2>1. Introduction</h2>
+            <p>Welcome to Techvelo. These Terms & Conditions govern your access to and use of the Techvelo website and its online tools. By accessing or using our website, you agree to these terms. If you do not agree, please discontinue using the website.</p>
         </div>
 
         <div class="static-section">
-            <h2>1. Nature of the Service</h2>
-            <p>Techvelo is a free, static web application providing browser-based utility tools for personal and educational use. It is offered as-is without any warranty of fitness for a particular purpose or guaranteed availability.</p>
+            <h2>2. Use of Our Website</h2>
+            <p>Techvelo provides online tools for students, professionals, and general users. You agree to use the website only for lawful purposes and in a way that does not interfere with other users or the operation and security of the website.</p>
         </div>
 
         <div class="static-section">
-            <h2>2. Permitted Use</h2>
-            <p>You may use Techvelo for lawful personal, educational, and professional purposes. You agree not to:</p>
+            <h2>3. Acceptable Use</h2>
+            <p>You agree not to:</p>
             <ul class="static-list">
-                <li>Use the service for any illegal, fraudulent, or harmful activity.</li>
-                <li>Attempt to reverse-engineer, copy, or redistribute Techvelo's source code without permission.</li>
-                <li>Use automated scripts or bots to scrape or abuse the service.</li>
-                <li>Use AI tools on this platform to generate content that violates OpenAI's usage policies.</li>
-                <li>Misrepresent AI-generated content as your own original academic work in a way that violates your institution's academic integrity policy.</li>
+                <li>Use the website for illegal, harmful, or fraudulent activities.</li>
+                <li>Attempt to disrupt, damage, or gain unauthorized access to the website.</li>
+                <li>Misuse, overload, or interfere with our tools, servers, or services.</li>
+                <li>Use our website in a way that violates the rights of others.</li>
             </ul>
         </div>
 
         <div class="static-section">
-            <h2>3. AI Tool Usage</h2>
-            <p>Techvelo's AI-powered tools (Text Summarizer, Rewriter, Code Explainer, etc.) connect to the OpenAI API using a key that you provide. By using these features:</p>
-            <ul class="static-list">
-                <li>You agree to comply with <a href="https://openai.com/policies/usage-policies" target="_blank" rel="noopener noreferrer" style="color:var(--primary-color)">OpenAI's Usage Policies</a>.</li>
-                <li>You are responsible for all API costs incurred by use of your key.</li>
-                <li>You understand that AI output may be inaccurate, incomplete, or outdated. Do not rely solely on AI output for medical, legal, financial, or safety-critical decisions.</li>
-                <li>Techvelo does not store, review, or take responsibility for any content you input into AI tools.</li>
-            </ul>
+            <h2>4. Online Tools</h2>
+            <p>Techvelo offers tools intended to help users complete everyday digital tasks. While we aim to keep our tools useful and accurate, we do not guarantee that every result will be error-free, complete, or suitable for every purpose. Users are responsible for reviewing results before relying on them.</p>
         </div>
 
         <div class="static-section">
-            <h2>4. Academic Integrity</h2>
-            <p>Essay Structure Helper, Notes to Study Guide, Quiz Generator, and similar tools are intended as planning and learning aids. You are responsible for ensuring your use of these tools complies with your educational institution's academic integrity and plagiarism policies. Techvelo takes no responsibility for any academic consequences arising from misuse.</p>
+            <h2>5. Intellectual Property</h2>
+            <p>Unless otherwise stated, the Techvelo website design, branding, original content, and website materials are owned by Techvelo or used with permission. You may use our tools for their intended purposes, but you may not copy, redistribute, or commercially exploit our protected materials without appropriate authorization.</p>
         </div>
 
         <div class="static-section">
-            <h2>5. Tool Accuracy</h2>
-            <p>Tools such as the GPA Calculator and Citation Generator provide outputs based on standard formulas and formats. These may not perfectly match every university's grading scale or citation requirements. Always verify important outputs with your institution or a qualified professional.</p>
+            <h2>6. Third-Party Services and Links</h2>
+            <p>Our website may contain links to third-party websites or use third-party services. These services operate under their own terms and policies. Techvelo is not responsible for third-party content, availability, or practices.</p>
         </div>
 
         <div class="static-section">
-            <h2>6. No Data Guarantee</h2>
-            <p>Data stored in your browser's <code>localStorage</code> (assignments, flashcards, exam dates, etc.) is stored solely on your device. Techvelo does not back up this data. Clearing browser data, switching browsers, or using a different device will result in loss of locally stored data. We strongly recommend using the export functions provided in each tool.</p>
+            <h2>7. Advertising</h2>
+            <p>Techvelo may display advertisements provided by third-party advertising services. Advertisements and their linked products or services are the responsibility of the relevant advertisers or providers.</p>
         </div>
 
         <div class="static-section">
-            <h2>7. Disclaimer of Warranties</h2>
-            <p>Techvelo is provided <strong>"as is"</strong> without warranties of any kind, express or implied. We do not warrant that the service will be uninterrupted, error-free, or free of viruses or other harmful components. Your use of the service is at your sole risk.</p>
+            <h2>8. Disclaimer</h2>
+            <p>The website and its tools are provided on an "as is" and "as available" basis, to the extent permitted by applicable law. We make no guarantee that the website will always be available, uninterrupted, secure, or free from errors.</p>
         </div>
 
         <div class="static-section">
-            <h2>8. Limitation of Liability</h2>
-            <p>To the maximum extent permitted by applicable law, Techvelo and its creators shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your use of, or inability to use, the service.</p>
-        </div>
-
-        <div class="static-section">
-            <h2>9. Third-Party Links</h2>
-            <p>Techvelo may link to external sites (e.g., OpenAI, Formspree). These links are provided for convenience. We are not responsible for the content, accuracy, or privacy practices of any external website.</p>
+            <h2>9. Limitation of Liability</h2>
+            <p>To the extent permitted by applicable law, Techvelo will not be liable for indirect, incidental, or consequential loss arising from the use of, or inability to use, the website or its tools. Nothing in these terms excludes liability that cannot legally be excluded.</p>
         </div>
 
         <div class="static-section">
             <h2>10. Changes to These Terms</h2>
-            <p>We reserve the right to modify these Terms at any time. Changes take effect when posted on this page. Your continued use of Techvelo after changes constitutes your acceptance of the revised Terms.</p>
+            <p>We may update these Terms & Conditions from time to time. Any updates will be published on this page with a revised date. Continued use of the website after changes are published means you accept the updated terms, where permitted by law.</p>
         </div>
 
         <div class="static-section">
-            <h2>11. Contact</h2>
-            <p>If you have questions about these Terms, please use the <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page.</p>
+            <h2>11. Contact Us</h2>
+            <p>If you have any questions about these Terms & Conditions, please contact us through the <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page on Techvelo.</p>
         </div>
         `
     );
