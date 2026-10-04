@@ -252,81 +252,72 @@ function renderPrivacyPage(container) {
     document.title = 'Privacy Policy — Techvelo';
     container.innerHTML = pageShell(
         'Privacy Policy',
-        'Last updated: October 2025',
+        'Last Updated: October 2026',
         `
         <div class="static-section">
-            <p>This Privacy Policy describes how Techvelo ("we", "our", or "us") handles information in connection with your use of this website. Please read it carefully. If you have any questions, use the <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page.</p>
+            <h2>Introduction</h2>
+            <p>Welcome to Techvelo. Your privacy is important to us. This Privacy Policy explains what information may be collected when you use our website, how it may be used, and the choices available to you.</p>
         </div>
 
         <div class="static-section">
-            <h2>1. Who We Are</h2>
-            <p>Techvelo is a static, browser-based web application that provides free online tools. It does not operate a backend server that processes or stores personal user data as part of normal tool usage.</p>
+            <h2>Information We Collect</h2>
+            <p>Techvelo may collect information you voluntarily provide, such as your name, email address, or message when you contact us through our contact form. Basic technical information, such as browser type, device information, and pages visited, may also be collected through website services.</p>
         </div>
 
         <div class="static-section">
-            <h2>2. Data We Do Not Collect</h2>
+            <h2>How We Use Information</h2>
+            <p>We may use collected information to:</p>
             <ul class="static-list">
-                <li>We do <strong>not</strong> collect your name, email address, or any personal identifiers as part of tool usage.</li>
-                <li>We do <strong>not</strong> have user accounts or authentication.</li>
-                <li>We do <strong>not</strong> use advertising tracking, behavioural analytics, or retargeting pixels.</li>
-                <li>We do <strong>not</strong> install third-party tracking cookies.</li>
-                <li>We do <strong>not</strong> upload your images, PDFs, or documents to any server — all file processing happens locally in your browser.</li>
+                <li>Respond to user questions and messages.</li>
+                <li>Improve our website, tools, and user experience.</li>
+                <li>Maintain website security and prevent misuse.</li>
+                <li>Understand general website usage and performance.</li>
             </ul>
         </div>
 
         <div class="static-section">
-            <h2>3. Local Browser Storage</h2>
-            <p>Several student tools (Assignment Planner, Exam Countdown, Flashcard Maker, Research Organizer) save data to your browser's <code>localStorage</code>. This data:</p>
-            <ul class="static-list">
-                <li>Is stored only on your own device.</li>
-                <li>Is never sent to Techvelo or any third party.</li>
-                <li>Can be deleted at any time by clearing your browser's site data for this page.</li>
-                <li>Is not accessible to other websites or browser tabs.</li>
-            </ul>
-            <p>The selected light/dark theme preference is also stored in <code>localStorage</code>.</p>
+            <h2>Cookies</h2>
+            <p>Techvelo or third-party services may use cookies and similar technologies to improve website functionality, understand usage, and support advertising. You can manage or disable cookies through your browser settings. Some website features may not work as intended if cookies are disabled.</p>
         </div>
 
         <div class="static-section">
-            <h2>4. AI Tools and the OpenAI API</h2>
-            <p>Tools such as the AI Text Summarizer, AI Rewriter, Code Explainer, and others offer optional AI-powered features. These work as follows:</p>
-            <ul class="static-list">
-                <li>You supply your own OpenAI API key directly in the tool's input field.</li>
-                <li>Your key is saved to your browser's <code>localStorage</code> on your device only. Techvelo never transmits your key to any Techvelo server.</li>
-                <li>When you activate an AI feature, your text input is sent <strong>directly from your browser to the OpenAI API</strong> (api.openai.com) using your own key.</li>
-                <li>Your use of OpenAI is subject to <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer" style="color:var(--primary-color)">OpenAI's Privacy Policy</a>.</li>
-                <li>We recommend you do not paste sensitive personal information (medical records, financial data, passwords) into any AI input field.</li>
-            </ul>
+            <h2>Google AdSense and Advertising</h2>
+            <p>Techvelo may use Google AdSense or other third-party advertising services to display advertisements. These services may use cookies or similar technologies to show ads based on users' visits to this or other websites, subject to their own policies and applicable settings. Users can learn more about Google's advertising practices and manage ad personalization through Google's Ads Settings and privacy resources.</p>
         </div>
 
         <div class="static-section">
-            <h2>5. Third-Party Resources</h2>
-            <p>Techvelo loads the following third-party resources to function:</p>
-            <ul class="static-list">
-                <li><strong>Google Fonts</strong> (fonts.googleapis.com) — delivers the Outfit typeface. Google may log font requests per their standard logging policy.</li>
-                <li><strong>Lucide Icons</strong> (unpkg.com) — delivers icon assets via a CDN.</li>
-                <li><strong>pdf-lib</strong> and <strong>PDF.js</strong> (via unpkg.com and cdnjs.cloudflare.com) — delivered as JavaScript libraries for PDF processing. These run in your browser; your PDF files are never sent to these CDNs.</li>
-            </ul>
-            <p>These services may collect basic server request logs (IP address, timestamp, resource requested) in the ordinary course of CDN operation. We do not control those logs.</p>
+            <h2>Third-Party Services</h2>
+            <p>Our website may use third-party services, such as hosting, analytics, contact form processing, or advertising providers. These services may process information according to their own privacy policies. Techvelo does not control the privacy practices of third-party websites or services.</p>
         </div>
 
         <div class="static-section">
-            <h2>6. Contact Form</h2>
-            <p>If you use the Contact form, your submitted name, email address, and message may be processed by a third-party form service (such as Formspree or Web3Forms) if one has been configured. This will be clearly noted when the service is activated. Until then, form submissions are not delivered anywhere.</p>
+            <h2>Data Security</h2>
+            <p>We take reasonable steps to protect information submitted to us. However, no method of transmission or electronic storage is completely secure, and we cannot guarantee absolute security.</p>
         </div>
 
         <div class="static-section">
-            <h2>7. Children's Privacy</h2>
-            <p>Techvelo is a general-purpose tool website. We do not knowingly collect any data from children under 13 and have no mechanism to do so. If you believe a child has provided personal data through this site, please contact us.</p>
+            <h2>Children's Privacy</h2>
+            <p>Techvelo is a general-purpose website and is not knowingly designed to collect personal information from children. If you believe a child has provided personal information to us, please contact us so we can review the request.</p>
         </div>
 
         <div class="static-section">
-            <h2>8. Changes to This Policy</h2>
-            <p>We may update this Privacy Policy from time to time. When we do, the "Last updated" date at the top of this page will change. Material changes will be noted prominently. Continued use of Techvelo after changes constitutes acceptance of the revised policy.</p>
+            <h2>External Links</h2>
+            <p>Our website may contain links to third-party websites. We are not responsible for the content, security, or privacy practices of those websites. We encourage users to review their privacy policies.</p>
         </div>
 
         <div class="static-section">
-            <h2>9. Contact</h2>
-            <p>If you have any questions about this Privacy Policy, please use the <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page.</p>
+            <h2>Your Choices</h2>
+            <p>You may choose not to provide personal information through our contact form. You can also manage cookies through your browser and adjust available advertising personalization settings through the relevant third-party services.</p>
+        </div>
+
+        <div class="static-section">
+            <h2>Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. Any changes will be published on this page with an updated revision date.</p>
+        </div>
+
+        <div class="static-section">
+            <h2>Contact Us</h2>
+            <p>If you have questions about this Privacy Policy or how information is handled, please contact us through the <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page on Techvelo.</p>
         </div>
         `
     );
