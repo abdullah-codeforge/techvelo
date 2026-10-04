@@ -464,7 +464,7 @@ function renderToolPage(container, tool) {
         </div>
     `;
 
-    const toolUI = getToolUI(tool.id);
+    const toolUI = (window.getToolUI || getToolUI)(tool.id);
     const guide = getToolGuide(tool.id);
     
     container.innerHTML = `
@@ -479,7 +479,7 @@ function renderToolPage(container, tool) {
     `;
     
     // Initialize specific tool logic
-    initToolLogic(tool.id);
+    (window.initToolLogic || initToolLogic)(tool.id);
 }
 
 
@@ -537,7 +537,7 @@ function getToolUI(id) {
                 </div>
                 <div class="input-group">
                     <label>OpenAI API Key</label>
-                    <input type="text" id="ai-key" placeholder="sk-..." type="password">
+                    <input type="password" id="ai-key" placeholder="sk-...">
                 </div>
                 <div class="input-group">
                     <label>Text to Summarize</label>
@@ -568,7 +568,7 @@ function getToolUI(id) {
                 </div>
                 <div class="input-group">
                     <label>OpenAI API Key</label>
-                    <input type="text" id="ai-key-rw" placeholder="sk-..." type="password">
+                    <input type="password" id="ai-key-rw" placeholder="sk-...">
                 </div>
                 <div class="input-group">
                     <label>Text to Rewrite</label>
