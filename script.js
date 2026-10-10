@@ -286,7 +286,7 @@ function initSearch() {
               `).join('')
             : '<div style="padding: 1rem; color: var(--text-secondary)">No tools found.</div>';
             
-        if (window.lucide) lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons();
         results.classList.remove('hidden');
     });
 
@@ -534,7 +534,7 @@ function initRouter() {
     }
     
     window.scrollTo(0, 0);
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
 }
 
 
@@ -604,7 +604,7 @@ function renderAllTools(container) {
     `;
     
     container.innerHTML = html;
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
     
     const toolsContainer = document.getElementById('tools-container');
     const searchInput = document.getElementById('tools-search');
@@ -634,7 +634,7 @@ function renderAllTools(container) {
             out = `<div class="text-center" style="padding: 3rem; color: var(--text-secondary); font-size: 1.2rem;">No tools found matching "${query}".</div>`;
         }
         toolsContainer.innerHTML = out;
-        if (window.lucide) lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons();
     };
     
     searchInput.addEventListener('input', (e) => renderFiltered(e.target.value));
@@ -978,6 +978,9 @@ function initToolLogic(id) {
     if (id === 'json-formatter') initJsonFormatter();
     if (id === 'password-generator') initPasswordGenerator();
 }
+
+window.getToolUI = getToolUI;
+window.initToolLogic = initToolLogic;
 
 function copyToClipboard(text, btn) {
     if(!text) return;

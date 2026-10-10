@@ -55,14 +55,16 @@ const originalGetToolUI = window.getToolUI;
 window.getToolUI = function(id) {
     const customUI = getStudentToolUI(id);
     if (customUI) return customUI;
-    return originalGetToolUI(id);
+    if (typeof originalGetToolUI === 'function') return originalGetToolUI(id);
+    return '';
 };
 
 // Intercept initToolLogic
 const originalInitToolLogic = window.initToolLogic;
 window.initToolLogic = function(id) {
     if (initStudentToolLogic(id)) return true;
-    return originalInitToolLogic(id);
+    if (typeof originalInitToolLogic === 'function') return originalInitToolLogic(id);
+    return false;
 };
 
 function getStudentToolUI(id) {
@@ -1044,15 +1046,16 @@ function initStudentUnitConverter() {
     const tSel = document.getElementById('uc-to');
     
     const updateDropdowns = () => {
-        const c = cat.value;
+        const c = (cat.value || 'length').toLowerCase();
         fSel.innerHTML = ''; tSel.innerHTML = '';
-        if (c === 'temp') {
+        if (c === 'temp' || c === 'temperature') {
             ['Celsius', 'Fahrenheit', 'Kelvin'].forEach(u => {
                 fSel.innerHTML += `<option value="${u}">${u}</option>`;
                 tSel.innerHTML += `<option value="${u}">${u}</option>`;
             });
         } else {
-            Object.keys(units[c]).forEach(u => {
+            const list = units[c] || units.length;
+            Object.keys(list).forEach(u => {
                 fSel.innerHTML += `<option value="${u}">${u}</option>`;
                 tSel.innerHTML += `<option value="${u}">${u}</option>`;
             });
