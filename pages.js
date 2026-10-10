@@ -63,7 +63,7 @@ function renderAboutPage(container) {
         <div class="static-section">
             <h2>Our Commitment</h2>
             <p>At Techvelo, we are continuously working to improve our tools and user experience. We believe powerful digital tools should be simple, accessible, and free for everyone to use.</p>
-            <p>Have a suggestion or found something that could be better? We'd love to hear from you via our <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page.</p>
+            <p>Have a suggestion or found something that could be better? We'd love to hear from you via our <a href="/contact" style="color:var(--primary-color)">Contact Us</a> page.</p>
         </div>
         `
     );
@@ -317,7 +317,7 @@ function renderPrivacyPage(container) {
 
         <div class="static-section">
             <h2>Contact Us</h2>
-            <p>If you have questions about this Privacy Policy or how information is handled, please contact us through the <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page on Techvelo.</p>
+            <p>If you have questions about this Privacy Policy or how information is handled, please contact us through the <a href="/contact" style="color:var(--primary-color)">Contact Us</a> page on Techvelo.</p>
         </div>
         `
     );
@@ -391,7 +391,7 @@ function renderTermsPage(container) {
 
         <div class="static-section">
             <h2>11. Contact Us</h2>
-            <p>If you have any questions about these Terms & Conditions, please contact us through the <a href="#/contact" style="color:var(--primary-color)">Contact Us</a> page on Techvelo.</p>
+            <p>If you have any questions about these Terms & Conditions, please contact us through the <a href="/contact" style="color:var(--primary-color)">Contact Us</a> page on Techvelo.</p>
         </div>
         `
     );

@@ -202,7 +202,31 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     document.getElementById('current-year').textContent = new Date().getFullYear();
     
+    window.addEventListener('popstate', initRouter);
     window.addEventListener('hashchange', initRouter);
+
+    // Global listener for SPA navigation links
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (!link) return;
+        const href = link.getAttribute('href');
+        if (!href) return;
+
+        if (href.startsWith('/') && !href.startsWith('//')) {
+            e.preventDefault();
+            if (window.location.pathname !== href) {
+                history.pushState(null, '', href);
+                initRouter();
+            }
+        } else if (href.startsWith('#/')) {
+            e.preventDefault();
+            const newPath = href.slice(1);
+            if (window.location.pathname !== newPath) {
+                history.pushState(null, '', newPath);
+                initRouter();
+            }
+        }
+    });
 });
 
 function initTheme() {
@@ -252,7 +276,7 @@ function initSearch() {
         
         results.innerHTML = matches.length 
             ? matches.map(t => `
-                <a href="#/tools/${t.id}" class="search-result-item" onclick="document.getElementById('global-search').value=''; document.getElementById('search-results').classList.add('hidden');">
+                <a href="/tools/${t.id}" class="search-result-item" onclick="document.getElementById('global-search').value=''; document.getElementById('search-results').classList.add('hidden');">
                     <i data-lucide="${t.icon}"></i>
                     <div>
                         <div style="font-weight: 500">${t.name}</div>
@@ -273,71 +297,240 @@ function initSearch() {
     });
 }
 
-function setPageMeta(title, description) {
+function setPageMeta(title, description, canonicalUrl) {
     document.title = title;
-    const descEl = document.querySelector('meta[name="description"]');
-    if (descEl) descEl.setAttribute('content', description);
+    
+    let descEl = document.querySelector('meta[name="description"]');
+    if (descEl) {
+        descEl.setAttribute('content', description);
+    } else {
+        descEl = document.createElement('meta');
+        descEl.setAttribute('name', 'description');
+        descEl.setAttribute('content', description);
+        document.head.appendChild(descEl);
+    }
+
+    if (canonicalUrl) {
+        let canonicalEl = document.querySelector('link[rel="canonical"]');
+        if (canonicalEl) {
+            canonicalEl.setAttribute('href', canonicalUrl);
+        } else {
+            canonicalEl = document.createElement('link');
+            canonicalEl.setAttribute('rel', 'canonical');
+            canonicalEl.setAttribute('href', canonicalUrl);
+            document.head.appendChild(canonicalEl);
+        }
+
+        let ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
+    }
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', description);
+
+    let twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twTitle) twTitle.setAttribute('content', title);
+
+    let twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', description);
+}
+
+function getToolMeta(tool) {
+    const metaMap = {
+        'word-counter': {
+            title: 'Word Counter - Free Online Character & Word Count Tool | Techvelo',
+            description: 'Count words, characters, sentences, paragraphs, and estimate reading time instantly. Free online word count tool with no signup required.'
+        },
+        'case-converter': {
+            title: 'Case Converter - Convert Text to Uppercase, Lowercase, Title Case | Techvelo',
+            description: 'Convert text to UPPERCASE, lowercase, Title Case, and Sentence case instantly online. Free text capitalization converter.'
+        },
+        'ai-summarizer': {
+            title: 'AI Text Summarizer - Summarize Articles & Documents Online | Techvelo',
+            description: 'Summarize long articles, essays, and reports into concise summaries using AI. Fast, customizable summary length.'
+        },
+        'ai-rewriter': {
+            title: 'AI Text Rewriter - Rephrase Content in Different Tones | Techvelo',
+            description: 'Rewrite and rephrase your text into professional, simple, friendly, or formal tones using AI.'
+        },
+        'image-compressor': {
+            title: 'Image Compressor - Compress JPG, PNG & WebP Online | Techvelo',
+            description: 'Compress JPEG, PNG, and WebP images locally in your browser. Reduce image file size without losing quality. No upload required.'
+        },
+        'image-resizer': {
+            title: 'Image Resizer - Resize Images by Dimensions Online | Techvelo',
+            description: 'Resize JPEG, PNG, and WebP images by width and height in pixels. Maintain aspect ratio with browser-based processing.'
+        },
+        'pdf-merger': {
+            title: 'PDF Merger - Combine Multiple PDF Files Online | Techvelo',
+            description: 'Merge multiple PDF files into one single PDF document directly in your browser. Secure, fast, and 100% free.'
+        },
+        'pdf-to-images': {
+            title: 'PDF to Images - Convert PDF Pages to PNG Online | Techvelo',
+            description: 'Convert PDF pages into downloadable high-quality PNG images locally in your browser. No registration needed.'
+        },
+        'json-formatter': {
+            title: 'JSON Formatter & Validator - Format and Minify JSON | Techvelo',
+            description: 'Format, beautify, validate, and minify JSON data online. Easily find JSON syntax errors with quick formatting.'
+        },
+        'password-generator': {
+            title: 'Password Generator - Create Secure & Strong Passwords | Techvelo',
+            description: 'Generate strong, random passwords with custom length, numbers, and symbols. Browser-based security tool.'
+        },
+        'assignment-planner': {
+            title: 'Assignment Planner - Track Homework & Project Deadlines | Techvelo',
+            description: 'Organize your academic assignments, track due dates, set priorities, and manage deadlines with local browser storage.'
+        },
+        'citation-generator': {
+            title: 'Citation Generator - APA, MLA, Chicago & Harvard Citations | Techvelo',
+            description: 'Generate accurate academic citations in APA 7th, MLA 9th, Chicago, and Harvard styles for books, websites, and journal articles.'
+        },
+        'research-organizer': {
+            title: 'Research Paper Organizer - Manage Sources & Notes | Techvelo',
+            description: 'Organize literature, manage research sources, save key findings, tag entries, and export backups for academic papers.'
+        },
+        'presentation-outline': {
+            title: 'Presentation Outline Maker - Slide-by-Slide Outline Generator | Techvelo',
+            description: 'Create structured slide-by-slide presentation outlines for academic talks and business pitches. Manual & AI outline modes.'
+        },
+        'flashcard-maker': {
+            title: 'Flashcard Maker - Create & Study Digital Flashcards | Techvelo',
+            description: 'Create custom digital flashcards, study with interactive card flipping, and export/import decks for exam preparation.'
+        },
+        'quiz-generator': {
+            title: 'Quiz & MCQ Generator - Create & Take Custom Quizzes | Techvelo',
+            description: 'Build multiple-choice practice quizzes manually or generate quiz questions from your notes using AI.'
+        },
+        'gpa-calculator': {
+            title: 'GPA & CGPA Calculator - Calculate College & University Grades | Techvelo',
+            description: 'Calculate your semester GPA and cumulative CGPA accurately using the standard 4.0 grading scale.'
+        },
+        'study-timetable': {
+            title: 'Study Timetable Generator - Create Weekly Study Schedules | Techvelo',
+            description: 'Generate a balanced weekly study schedule by allocating subjects across study hours per day. Print or save to PDF.'
+        },
+        'scientific-calculator': {
+            title: 'Scientific Calculator - Online Math & Science Calculator | Techvelo',
+            description: 'Perform scientific functions including trigonometry, logarithms, square roots, and exponentiation in your browser.'
+        },
+        'notes-to-study-guide': {
+            title: 'Notes to Study Guide - Convert Lecture Notes to Study Reference | Techvelo',
+            description: 'Transform raw lecture notes into clean, structured study guides. Supports manual term extraction and AI formatting.'
+        },
+        'essay-structure-helper': {
+            title: 'Essay Structure Helper - Essay Outlines & Word Count Planner | Techvelo',
+            description: 'Plan argumentative, expository, or narrative essays with detailed section outlines and target word counts.'
+        },
+        'study-estimator': {
+            title: 'Reading Time & Study Estimator - Calculate Reading Duration | Techvelo',
+            description: 'Calculate reading time based on word count and reading speed, and estimate needed Pomodoro study sessions.'
+        },
+        'code-explainer': {
+            title: 'Code Explainer - AI Code Explanation & Bug Analysis | Techvelo',
+            description: 'Understand Python, JavaScript, Java, and C++ code snippets with AI-powered plain English explanations.'
+        },
+        'student-unit-converter': {
+            title: 'Student Unit Converter - Convert Length, Mass & Temperature | Techvelo',
+            description: 'Convert length, mass, and temperature units instantly. Precise academic unit converter running locally in browser.'
+        },
+        'exam-countdown': {
+            title: 'Exam Countdown - Track Days Remaining Until Exams | Techvelo',
+            description: 'Keep track of upcoming exam dates with days remaining countdowns, date sorting, and color-coded urgency alerts.'
+        }
+    };
+
+    if (metaMap[tool.id]) {
+        return metaMap[tool.id];
+    }
+    return {
+        title: `${tool.name} - Free Online Tool | Techvelo`,
+        description: `${tool.description} Use ${tool.name} free online at Techvelo — no signup required.`
+    };
 }
 
 function initRouter() {
-    const path = window.location.hash.slice(1) || '/';
+    let path = window.location.pathname;
+
+    // Backward compatibility for legacy hash URLs
+    if (window.location.hash && window.location.hash.startsWith('#/')) {
+        path = window.location.hash.slice(1);
+        history.replaceState(null, '', path);
+    }
+
+    // Normalize trailing slash
+    if (path.length > 1 && path.endsWith('/')) {
+        path = path.slice(0, -1);
+    }
+
     const app = document.getElementById('app-content');
-    
-    // Clear current content
+    if (!app) return;
     app.innerHTML = '';
 
-    if (path === '/' || path === '') {
+    const baseUrl = 'https://techvelo.vercel.app';
+
+    if (path === '' || path === '/') {
         setPageMeta(
             'Techvelo - Free Online Tools for Students & Professionals',
-            'Techvelo provides 25+ free online tools including AI text summarizer, PDF merger, image compressor, password generator, GPA calculator, citation generator, and more. No signup required.'
+            'Techvelo provides 25 free online tools including text tools, PDF merger, image compressor, password generator, GPA calculator, citation generator, and student utilities.',
+            `${baseUrl}/`
         );
         renderHome(app);
     } else if (path === '/tools') {
         setPageMeta(
             'All Tools - Techvelo',
-            'Browse all 25+ free online tools on Techvelo. Text tools, AI tools, PDF tools, image utilities, and university student tools — all in one place.'
+            'Browse all 25 free online tools on Techvelo. Text tools, AI tools, PDF tools, image utilities, and university student tools — all in one place.',
+            `${baseUrl}/tools`
         );
         renderAllTools(app);
     } else if (path.startsWith('/tools/')) {
         const toolId = path.split('/')[2];
         const tool = TOOLS.find(t => t.id === toolId);
         if (tool) {
+            const meta = getToolMeta(tool);
             setPageMeta(
-                `${tool.name} - Free Online Tool | Techvelo`,
-                `${tool.description} Use ${tool.name} free online at Techvelo — no signup required.`
+                meta.title,
+                meta.description,
+                `${baseUrl}/tools/${tool.id}`
             );
             renderToolPage(app, tool);
         } else {
-            setPageMeta('Tool Not Found - Techvelo', 'The requested tool could not be found on Techvelo.');
-            app.innerHTML = '<div class="text-center section-title">Tool not found</div>';
+            setPageMeta('Tool Not Found - Techvelo', 'The requested tool could not be found on Techvelo.', `${baseUrl}${path}`);
+            app.innerHTML = '<div class="text-center section-title" style="margin-top:4rem;">Tool not found</div>';
         }
     } else if (path === '/about') {
         setPageMeta(
             'About Us - Techvelo',
-            'Learn about Techvelo, our mission to make everyday digital tasks easier, and the tools we provide for students, professionals, and general users.'
+            'Learn about Techvelo, our mission to make everyday digital tasks easier, and the tools we provide for students, professionals, and general users.',
+            `${baseUrl}/about`
         );
         renderAboutPage(app);
     } else if (path === '/contact') {
         setPageMeta(
             'Contact Us - Techvelo',
-            'Get in touch with the Techvelo team. We welcome feedback, questions, and suggestions about our free online tools.'
+            'Get in touch with the Techvelo team. We welcome feedback, questions, and suggestions about our free online tools.',
+            `${baseUrl}/contact`
         );
         renderContactPage(app);
     } else if (path === '/privacy') {
         setPageMeta(
             'Privacy Policy - Techvelo',
-            'Read the Techvelo Privacy Policy to understand how we handle your data. Techvelo does not collect personal data and all tool processing happens in your browser.'
+            'Read the Techvelo Privacy Policy to understand how we handle your data. Techvelo does not collect personal data and all tool processing happens in your browser.',
+            `${baseUrl}/privacy`
         );
         renderPrivacyPage(app);
     } else if (path === '/terms') {
         setPageMeta(
             'Terms & Conditions - Techvelo',
-            'Read the Techvelo Terms & Conditions governing your use of our free online tools and website.'
+            'Read the Techvelo Terms & Conditions governing your use of our free online tools and website.',
+            `${baseUrl}/terms`
         );
         renderTermsPage(app);
     } else {
-        setPageMeta('Page Not Found - Techvelo', 'The page you are looking for does not exist on Techvelo.');
-        app.innerHTML = '<div class="text-center section-title">Page not found</div>';
+        setPageMeta('Page Not Found - Techvelo', 'The page you are looking for does not exist on Techvelo.', `${baseUrl}${path}`);
+        app.innerHTML = '<div class="text-center section-title" style="margin-top:4rem;">Page not found</div>';
     }
     
     window.scrollTo(0, 0);
@@ -347,7 +540,7 @@ function initRouter() {
 
 function createToolCard(tool) {
     return `
-        <a href="#/tools/${tool.id}" class="glass-card tool-card">
+        <a href="/tools/${tool.id}" class="glass-card tool-card">
             <div class="tool-icon-wrapper">
                 <i data-lucide="${tool.icon}"></i>
             </div>
@@ -363,7 +556,7 @@ function renderHome(container) {
         <section class="hero">
             <h1>Everything You Need,<br>One Smart Platform.</h1>
             <p>Techvelo offers premium, fast, and free online tools for everyday tasks. Process PDFs, optimize images, generate passwords, and leverage AI—all in one place.</p>
-            <a href="#/tools" class="btn-primary">
+            <a href="/tools" class="btn-primary">
                 Explore Tools <i data-lucide="arrow-right"></i>
             </a>
         </section>
@@ -374,7 +567,7 @@ function renderHome(container) {
                 ${TOOLS.slice(0, 6).map(createToolCard).join('')}
             </div>
             <div class="text-center">
-                <a href="#/tools" class="btn-secondary">View All Tools</a>
+                <a href="/tools" class="btn-secondary">View All Tools</a>
             </div>
         </section>
         
@@ -382,12 +575,12 @@ function renderHome(container) {
             <h2 class="section-title text-center">Categories</h2>
             <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
                 ${CATEGORIES.map(cat => `
-                    <div class="glass-card text-center" style="padding: 2rem;">
+                    <a href="/tools" class="glass-card text-center" style="padding: 2rem; display: block; text-decoration: none;">
                         <h3>${cat}</h3>
                         <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
                             ${TOOLS.filter(t => t.category === cat).length} tools
                         </p>
-                    </div>
+                    </a>
                 `).join('')}
             </div>
         </section>
@@ -451,8 +644,8 @@ function renderAllTools(container) {
 function renderToolPage(container, tool) {
     const breadcrumbs = `
         <div class="breadcrumbs">
-            <a href="#/">Home</a> <i data-lucide="chevron-right" style="width: 14px"></i>
-            <a href="#/tools">Tools</a> <i data-lucide="chevron-right" style="width: 14px"></i>
+            <a href="/">Home</a> <i data-lucide="chevron-right" style="width: 14px"></i>
+            <a href="/tools">Tools</a> <i data-lucide="chevron-right" style="width: 14px"></i>
             <span>${tool.name}</span>
         </div>
     `;
@@ -466,6 +659,21 @@ function renderToolPage(container, tool) {
 
     const toolUI = (window.getToolUI || getToolUI)(tool.id);
     const guide = getToolGuide(tool.id);
+
+    const relatedTools = TOOLS.filter(t => t.id !== tool.id && t.category === tool.category).slice(0, 3);
+    if (relatedTools.length < 3) {
+        const remaining = TOOLS.filter(t => t.id !== tool.id && !relatedTools.includes(t)).slice(0, 3 - relatedTools.length);
+        relatedTools.push(...remaining);
+    }
+
+    const relatedSection = `
+        <div style="margin-top: 3rem;">
+            <h3 class="section-title" style="font-size: 1.3rem;">Related Tools</h3>
+            <div class="grid">
+                ${relatedTools.map(createToolCard).join('')}
+            </div>
+        </div>
+    `;
     
     container.innerHTML = `
         <div class="tool-page">
@@ -475,6 +683,7 @@ function renderToolPage(container, tool) {
             <div class="glass-card tool-container">
                 ${toolUI}
             </div>
+            ${relatedSection}
         </div>
     `;
     
